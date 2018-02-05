@@ -78,10 +78,10 @@ export default ChildComponent => {
           return <Redirect to="/user/403" />;
         }
       }else{
-        notification.error({
-          message: '没有访问权限!!!!',
-          description: '对不起你没有登入!!!!,请先登入!!!!',
-        });
+        //notification.error({
+          //message: '没有访问权限!!!!',
+          //description: '对不起你没有登入!!!!,请先登入!!!!',
+        //});
         // Cookies.remove('token');
         // Cookies.remove('userInfo');
         return <Redirect to="/user/login" />;

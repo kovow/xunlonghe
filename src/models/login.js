@@ -25,15 +25,17 @@ export default {
         type: 'changeLoginStatus',
         payload: response
       });
-      yield (isEmpty(response.data.result.userInfo)?null : Cookies.set('userInfo',response.data.result.userInfo));
-      let token = yield (isEmpty(response.data.result.token)?null:response.data.result.token);
-      yield put({
-        type: 'setToken',
-        payload: token
-      });
-      yield put({
-        type: 'fetchPermission'
-      });
+      if(response.data.status === '200'){
+        yield (isEmpty(response.data.result.userInfo)?null : Cookies.set('userInfo',response.data.result.userInfo));
+        let token = yield (isEmpty(response.data.result.token)?null:response.data.result.token);
+        yield put({
+          type: 'setToken',
+          payload: token
+        });
+        yield put({
+          type: 'fetchPermission'
+        });
+      }
       yield put({
         type: 'changeSubmitting',
         payload: false,
