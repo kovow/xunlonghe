@@ -295,6 +295,11 @@ export const getNavData = app => [
             icon: 'profile',
             path: 'orderList',
             component: dy(app,['rule'],()=>import('../routes/Wxmall/order/OrderList'))
+          },{
+            name: '灯会门票订单列表',
+            icon: 'profile',
+            path: 'yhOrderList',
+            component: dy(app,['rule'],()=>import('../routes/Wxmall/order/YhOrderList'))
           }]
         }]
       },

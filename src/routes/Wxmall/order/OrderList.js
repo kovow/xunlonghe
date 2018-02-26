@@ -275,13 +275,13 @@ export default class OrderList extends PureComponent {
       tab: '待付款'
     },{
       key:'1',
-      tab: '待发货'
+      tab: '待核销'
     },{
       key:'2',
-      tab: '待收货'
+      tab: '已完成'
     },{
       key:'3',
-      tab: '待评价'
+      tab: '已退款'
     }];
     // 状态
     const {modalVisible,shopName} = this.state;

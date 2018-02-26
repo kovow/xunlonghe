@@ -1,4 +1,8 @@
-import { queryShopList, uploadSigImg,submitShopInfo,queryShopProductList,submitShopProductInfo,queryQrcode,queryTreeNodeCattegory,queryCoupon,submitCoupon,submitDeleteCoupon,queryUserManger,queryOrderList,queryOrderDetails,queryWxShop } from '../services/api';
+import { queryShopList, uploadSigImg,submitShopInfo,queryShopProductList,submitShopProductInfo,queryQrcode,queryTreeNodeCattegory,queryCoupon,submitCoupon,submitDeleteCoupon,queryUserManger,queryOrderList,queryOrderDetails,queryWxShop,
+  queryYhOrder,
+  queryYhOrderDetails,
+  queryYhOrderHx
+} from '../services/api';
 import {message} from 'antd';
 export default {
   namespace: 'rule',
@@ -272,6 +276,51 @@ export default {
         type: 'changeLoading',
         payload: false,
       });
+    },
+     // 获取订单数据
+     *fetchYhOrderList({payload},{call,put}){
+      yield put({
+        type: 'changeLoading',
+        payload: true,
+      });
+      const response = yield call(queryYhOrder,payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      yield put({
+        type: 'changeLoading',
+        payload: false,
+      });
+    },
+     // 获取订单详情
+    *fetchYhOrderDetails({payload},{call,put}){
+      yield put({
+        type: 'changeLoading',
+        payload: true,
+      });
+      const response = yield call(queryYhOrderDetails,payload);
+      yield put({
+        type: 'details',
+        payload: response,
+      });
+      yield put({
+        type: 'changeLoading',
+        payload: false,
+      });
+    },
+     // 核销退款
+     *YhOrderHx({payload},{call,put}){
+      yield put({
+        type: 'changeLoading',
+        payload: true,
+      });
+      const response = yield call(queryYhOrderHx,payload);
+      yield put({
+        type: 'changeLoading',
+        payload: false,
+      });
+      return response;
     },
   },
 

@@ -254,3 +254,21 @@ export async function queryWeiYunOrderDetails(payload){
 export async function queryWxShop(){
   return http.get('/admin/api/wxmall_sys/shopInfo');
 }
+// 樱花谷订单数据
+export async function queryYhOrder(payload){
+  if(payload){
+    if(payload.status){
+      return http.get(`/admin/api/wxmall_sys/yhOrder/list?status=${payload.status}`);
+    }else if(payload.cellphone){
+      return http.get(`/admin/api/wxmall_sys/yhOrder/list?cellphone=${payload.cellphone}`)
+    }
+  }else{
+    return http.get('/admin/api/wxmall_sys/yhOrder/list');
+  }
+}
+export async function queryYhOrderDetails(id){
+  return http.get(`/admin/api/wxmall_sys/yhOrder/detail?orderId=${id}`)
+}
+export async function queryYhOrderHx(payload){
+  return http.post(`/admin/api/wxmall_sys/orderStatus/modify?orderId=${payload.id}&actionType=${payload.type}`);
+}
