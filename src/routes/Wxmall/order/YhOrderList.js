@@ -13,7 +13,7 @@ const { TabPane } = Tabs;
   rule: state.rule,
 }))
 @Form.create()
-export default class OrderList extends PureComponent {
+export default class YhOrderList extends PureComponent {
   constructor(props){
     super(props);
     // 出事状态
@@ -35,7 +35,12 @@ export default class OrderList extends PureComponent {
     const {dispatch,form} = this.props;
     form.validateFields((err,value)=>{
       if(!err){
-        if(value.cellphone){
+        if(value.cellphone && this.state.activeKey){
+          dispatch({
+            type: 'rule/fetchYhOrderList',
+            payload: Object.assign(value,{status:this.state.activeKey})
+          });
+        }else if(value.cellphone){
           dispatch({
             type: 'rule/fetchYhOrderList',
             payload: value

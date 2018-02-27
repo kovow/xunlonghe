@@ -257,9 +257,11 @@ export async function queryWxShop(){
 // 樱花谷订单数据
 export async function queryYhOrder(payload){
   if(payload){
-    if(payload.status){
+    if(payload.status && !payload.cellphone){
       return http.get(`/admin/api/wxmall_sys/yhOrder/list?status=${payload.status}`);
-    }else if(payload.cellphone){
+    }else if(payload.cellphone && payload.status){
+      return http.get(`/admin/api/wxmall_sys/yhOrder/list?cellphone=${payload.cellphone}&status=${payload.status}`)
+    }else if(!payload.status && payload.cellphone){
       return http.get(`/admin/api/wxmall_sys/yhOrder/list?cellphone=${payload.cellphone}`)
     }
   }else{
