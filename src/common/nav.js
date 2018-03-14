@@ -140,15 +140,15 @@ export const getNavData = app => [
             name: '添加资源',
             path: 'add',
             icon: 'plus-square',
-            component: dy(app, ['form'], ()=> import('../routes/ErsSys/StepForm')),
+            component: dy(app, ['form'], ()=> import('../routes/ParkCart/index')),
             children: [
               {
                 path: 'confirm',
-                component: dy(app, ['form'], ()=> import('../routes/ErsSys/StepForm/Step2')),
+                component: dy(app, ['form'], ()=> import('../routes/ParkCart/index')),
               },
               {
                 path: 'result',
-                component: dy(app, ['form'], ()=> import('../routes/ErsSys/StepForm/Step3')),
+                component: dy(app, ['form'], ()=> import('../routes/ParkCart/index')),
               },
             ],
           }]
@@ -249,6 +249,11 @@ export const getNavData = app => [
             icon: 'qrcode',
             path: 'qrcode',
             component: dy(app, ['rule'], ()=> import('../routes/Wxmall/qrCode/QrCode')),
+          },{
+            name: '区域列表',
+            icon: 'database',
+            path: 'all',
+            component: dy(app,['rule'],()=>import('../routes/Wxmall/shop/areaList'))
           }]
         },{
           name: '商品管理',

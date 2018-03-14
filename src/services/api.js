@@ -1,75 +1,16 @@
 import { stringify } from 'qs';
-import request from '../utils/request';
 import {baseApi} from '../config/api';
 import {http} from '../utils/ajax';
 /**
  *   封装所有请求服务;
  * 基于async await 异步
  */ 
-export async function queryProjectNotice() {
-  return request('/api/project/notice');
+export async function fakeRegister(){
+  return http.get('/admin/api/404');
 }
 
-export async function queryActivities() {
-  return request('/api/activities');
-}
-
-export async function queryRule(params) {
-  return request(`/api/rule?${stringify(params)}`);
-}
-
-export async function removeRule(params) {
-  return request('/api/rule', {
-    method: 'POST',
-    body: {
-      ...params,
-      method: 'delete',
-    },
-  });
-}
-
-export async function addRule(params) {
-  return request('/api/rule', {
-    method: 'POST',
-    body: {
-      ...params,
-      method: 'post',
-    },
-  });
-}
-
-export async function fakeSubmitForm(params) {
-  return request('/api/forms', {
-    method: 'POST',
-    body: params,
-  });
-}
-
-export async function fakeChartData() {
-  return request('/api/fake_chart_data');
-}
-
-export async function queryTags() {
-  return request('/api/tags');
-}
-
-export async function queryBasicProfile() {
-  return request('/api/profile/basic');
-}
-
-export async function queryAdvancedProfile() {
-  return request('/api/profile/advanced');
-}
-
-export async function queryFakeList(params) {
-  return request(`/api/fake_list?${stringify(params)}`);
-}
 // 登入请求
 export async function fakeAccountLogin(params) {
-  // return request(`${baseApi}/admin/login`, {
-  //   method: 'POST',
-  //   body: params
-  // });
   return http.post('/admin/api/login',params);
 }
 // 注销用户
@@ -77,23 +18,6 @@ export async function userLogout(){
   return http.post('/admin/api/user/logout');
 }
 
-export async function fakeMobileLogin(params) {
-  return request('/api/login/mobile', {
-    method: 'POST',
-    body: params
-  });
-}
-
-export async function fakeRegister(params) {
-  return request('/api/register', {
-    method: 'POST',
-    body: params,
-  });
-}
-
-export async function queryNotices() {
-  return request('/api/notices');
-}
 // 获取后台菜单数据
 export async function getMenus() {
   return http.get('/admin/api/menu/list');
@@ -273,4 +197,20 @@ export async function queryYhOrderDetails(id){
 }
 export async function queryYhOrderHx(payload){
   return http.post(`/admin/api/wxmall_sys/orderStatus/modify?orderId=${payload.id}&actionType=${payload.type}`);
+}
+
+/*商铺区域api*/
+// 添加区域
+export async function queryShopAreaAdd(payload){
+  if(payload){
+    if(payload.name && !payload.parentId){
+      return http.post(`/admin/api/wxmall_sys/area/add?name=${payload.name}`);
+    }else if(payload.name && payload.parentId){
+      return http.post(`/admin/api/wxmall_sys/area/add?name=${payload.name}&parentId=${payload.parentId}`);
+    }
+  }
+}
+// 获取所以区域
+export async function queryShopAreaAllList(payload){
+  return http.get('/admin/api/wxmall_sys/area/all',payload);
 }

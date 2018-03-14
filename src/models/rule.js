@@ -1,7 +1,9 @@
 import { queryShopList, uploadSigImg,submitShopInfo,queryShopProductList,submitShopProductInfo,queryQrcode,queryTreeNodeCattegory,queryCoupon,submitCoupon,submitDeleteCoupon,queryUserManger,queryOrderList,queryOrderDetails,queryWxShop,
   queryYhOrder,
   queryYhOrderDetails,
-  queryYhOrderHx
+  queryYhOrderHx,
+  queryShopAreaAllList,
+  queryShopAreaAdd
 } from '../services/api';
 import {message} from 'antd';
 export default {
@@ -322,6 +324,37 @@ export default {
       });
       return response;
     },
+    // 获取所有区域列表
+    *fetchAreaAllList({ payload }, { call, put }) {
+      yield put({
+        type: 'changeLoading',
+        payload: true,
+      });
+      const response = yield call(queryShopAreaAllList,payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      yield put({
+        type: 'changeLoading',
+        payload: false,
+      });
+    },
+    // 添加区域
+    *addArea({payload},{call,put}){
+      yield put({
+        type: 'changeLoading',
+        payload: true,
+      });
+      const response = yield call(queryShopAreaAdd,payload);
+      if(response.data.status === '200'){
+        message.success('添加成功');
+      }
+      yield put({
+        type: 'changeLoading',
+        payload: false,
+      });
+    }
   },
 
   reducers: {
