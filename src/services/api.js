@@ -214,3 +214,13 @@ export async function queryShopAreaAdd(payload){
 export async function queryShopAreaAllList(payload){
   return http.get('/admin/api/wxmall_sys/area/all',payload);
 }
+//修改区域
+export async function updateShopArea(payload){
+  if(payload){
+    if(payload.name && !payload.parentId){
+      return http.post(`/admin/api/wxmall_sys/area/${payload.id}/modify?name=${payload.name}`);
+    }else if(payload.name && payload.parentId){
+      return http.post(`/admin/api/wxmall_sys/area/${payload.id}/modify?name=${payload.name}&parentId=${payload.parentId}`);
+    }
+  }
+}

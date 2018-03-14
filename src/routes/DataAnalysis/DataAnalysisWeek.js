@@ -9,7 +9,8 @@ import styles from './TableList.less';
 import moment from 'moment'; //时间格式化插件
 const FormItem = Form.Item;
 const { Option } = Select;
-const dateFormat = 'YYYY';
+const {MonthPicker} = DatePicker;
+const dateFormat = 'YYYY/MM';
 @connect(state => ({
   analysis: state.analysis,
 }))
@@ -22,9 +23,7 @@ class DataAnalysisWeek extends PureComponent{
     const {dispatch} = this.props;
     dispatch({
       type: 'analysis/fetchDataWeek',
-      payload: {
-        'year':2017
-      }
+      payload:Object.assign({},{udf1: '',udf2: ''})
     });
     dispatch({
       type: 'analysis/fetchShopName',
@@ -47,12 +46,13 @@ class DataAnalysisWeek extends PureComponent{
     const {form,dispatch} = this.props;
     form.validateFields((err,values)=>{
       if(!err){
-        const {date,shopId} = values;
+        const {udf1,udf2,shopId} = values;
         if(shopId){
           dispatch({
             type: 'analysis/fetchDataWeek',
             payload: {
-              'year':date.format('YYYY'),
+              'udf1':udf1.format('YYYY-MM'),
+              'udf2':udf2.format('YYYY-MM'),
               'shopId': shopId.join(',')
             }
           });
@@ -60,7 +60,8 @@ class DataAnalysisWeek extends PureComponent{
           dispatch({
             type: 'analysis/fetchDataWeek',
             payload: {
-              'year':date.format('YYYY')
+              'udf1':udf1.format('YYYY-MM'),
+              'udf2':udf2.format('YYYY-MM')
             }
           });
         }
@@ -80,13 +81,24 @@ class DataAnalysisWeek extends PureComponent{
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="订单日期">
-              {getFieldDecorator('date',{
+            <FormItem label="开始日期">
+              {getFieldDecorator('udf1',{
                 rules: [{
-                  required: true, message: '请选择查询时间',
+                  required: true, message: '请选择查询开始时间',
                 }]
               })(
-                <DatePicker style={{ width: '100%' }} format={dateFormat}/>
+                <MonthPicker style={{ width: '100%' }} format={dateFormat}/>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="结束日期">
+              {getFieldDecorator('udf2',{
+                rules: [{
+                  required: true, message: '请选择查询结束时间',
+                }]
+              })(
+                <MonthPicker style={{ width: '100%' }} format={dateFormat}/>
               )}
             </FormItem>
           </Col>

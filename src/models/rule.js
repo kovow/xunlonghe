@@ -3,7 +3,8 @@ import { queryShopList, uploadSigImg,submitShopInfo,queryShopProductList,submitS
   queryYhOrderDetails,
   queryYhOrderHx,
   queryShopAreaAllList,
-  queryShopAreaAdd
+  queryShopAreaAdd,
+  updateShopArea
 } from '../services/api';
 import {message} from 'antd';
 export default {
@@ -349,6 +350,22 @@ export default {
       const response = yield call(queryShopAreaAdd,payload);
       if(response.data.status === '200'){
         message.success('添加成功');
+      }
+      yield put({
+        type: 'changeLoading',
+        payload: false,
+      });
+    },
+    // 修改区域
+    *editArea({payload},{call,put}){
+      yield put({
+        type: 'changeLoading',
+        payload: true,
+      });
+      const response = yield call(updateShopArea,payload);
+      if(response.data.status === '200'){
+        yield put({type:'fetchAreaAllList'});
+        message.success('修改成功');
       }
       yield put({
         type: 'changeLoading',

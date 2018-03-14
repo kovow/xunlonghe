@@ -21,7 +21,9 @@ export default class areaList extends PureComponent {
     this.state = {
       expandForm: false, //展开高级搜索
       tableData: [],
-      modalVisible: false
+      modalVisible: false,
+      editModalVisible: false,
+      initData: {name:'',parentId:null}
     };
   }
   // 搜索事件
@@ -162,10 +164,10 @@ export default class areaList extends PureComponent {
   // 渲染分类树形节点
   renderTreeNodes = (data) => {
     return data.map((item) => {
-      if (item.categorys) {
+      if (item.children) {
         return (
           <TreeNode title={item.name} key={item.key} dataRef={item}>
-            {this.renderTreeNodes(item.categorys)}
+            {this.renderTreeNodes(item.children)}
           </TreeNode>
         );
       }
@@ -174,9 +176,9 @@ export default class areaList extends PureComponent {
   }
   onSelTree = (onKey,info)=>{
     if(onKey.length >0){
-      if(info.node.props.dataRef.categorys && info.node.props.dataRef.categorys.length >0){
+      if(info.node.props.dataRef.children && info.node.props.dataRef.children.length >0){
         this.setState({
-          tableData: info.node.props.dataRef.categorys
+          tableData: [info.node.props.dataRef]
         });
       }else{
         this.setState({
@@ -205,21 +207,53 @@ export default class areaList extends PureComponent {
         });
         this.handleModalVisible();
       }
-    })
+    });
+  }
+  // 编辑区域
+  handleEditArea = (record)=>{
+    this.setState({
+      editModalVisible: true,
+      initData: Object.assign({},{name:record.name,id:record.id,parentId:record.parentId})
+    });
+  }
+  // 修改区域
+  handleEditSubmit = (e)=>{
+    e.preventDefault();
+    const {form,dispatch} = this.props;
+    form.validateFields((err,values)=>{
+      if(!err){
+        dispatch({
+          type: 'rule/editArea',
+          payload: Object.assign({},{name:values.name,parentId:values.parentId,id:this.state.initData.id})
+        });
+        this.setState({
+          editModalVisible: false
+        });
+      }
+    });
   }
   render() {
     // 表格数据
     const {rule: { loading, data},form:{getFieldDecorator}} = this.props;
-    const {tableData,modalVisible} = this.state;
+    const {tableData,modalVisible,editModalVisible,initData} = this.state;
     // 表格列数据
     const columns = [{
-      title: '分类id',
+      title: '区域id',
       key:'id',
       dataIndex:'id'
     }, {
-      title: '分类名称',
+      title: '区域名称',
       key:'name',
       dataIndex:'name',
+    },{
+      title: '状态',
+      key: 'status',
+      dataIndex: 'status'
+    },{
+      title: '操作',
+      key: 'action',
+      dataIndex: 'action',
+      render: (key,record)=><Button type="primary" onClick={()=>this.handleEditArea(record)}>编辑</Button>
     }];
    
     // 表单布局
@@ -275,7 +309,7 @@ export default class areaList extends PureComponent {
           </div>
         </Card>
         <Modal
-          title="修改店铺信息"
+          title="添加区域"
           visible={modalVisible}
           onCancel={this.handleModalVisible}
           footer={null}
@@ -299,6 +333,48 @@ export default class areaList extends PureComponent {
               label="选择区域"
             >
               {getFieldDecorator('parentId')(
+                <Select placeholder="请选择区域" style={{ width: '100%' }}>
+                  {/* <Option value="0" >父级区域</Option> */}
+                  {data && data.map((item,index)=>{
+                    return <Option value={item.id} key={index}>{item.name}</Option>
+                  })}
+                </Select>
+              )}
+            </FormItem>
+            <FormItem {...tailFormItemLayout}>
+              <Button type="primary" htmlType="submit">确定</Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
+            </FormItem>
+          </Form>
+        </Modal>
+        < Modal
+          title="修改区域"
+          visible={editModalVisible}
+          onCancel={()=>{this.setState({editModalVisible: false})}}
+          footer={null}
+        >
+          <Form onSubmit={this.handleEditSubmit} layout="vertical">
+            <FormItem
+              {...formItemLayout}
+              label="区域名称"
+              hasFeedback
+            >
+              {getFieldDecorator('name',{
+                initialValue: initData.name,
+                 rules: [{
+                  required: true, message: '请输入区域名称!',
+                }]
+              })(
+                <Input  placeholder="请输入区域名称!"/>
+              )}
+            </FormItem>
+            <FormItem 
+              {...formItemLayout}
+              label="选择区域"
+            >
+              {getFieldDecorator('parentId',{
+                initialValue: initData.parentId
+              })(
                 <Select placeholder="请选择区域" style={{ width: '100%' }}>
                   {/* <Option value="0" >父级区域</Option> */}
                   {data && data.map((item,index)=>{
