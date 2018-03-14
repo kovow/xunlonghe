@@ -18,6 +18,10 @@
 2. 移除mock 环境
 3. 优化沉淀语句.沉淀写法;
 4. 增加gif 动画演示
+## 示例图片
+[![示例图片1](./screen/01.gif) "示例图片1")](https://github.com/whevether/xunlonghe.git "示例")
+[![示例图片2](./screen/02.gif) "示例图片2")](https://github.com/whevether/xunlonghe.git "示例")
+[![示例图片3](./screen/03.gif) "示例图片3")](https://github.com/whevether/xunlonghe.git "示例")
 ## 使用
 
 ```bash
