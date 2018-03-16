@@ -19,6 +19,11 @@ class DataAnalysisWeek extends PureComponent{
   constructor(props){
     super(props);
   }
+  state = {
+    startValue: null,
+    endValue: null,
+    endOpen: false,
+  };
   componentWillMount(){
     const {dispatch} = this.props;
     dispatch({
@@ -68,6 +73,45 @@ class DataAnalysisWeek extends PureComponent{
       }
     });
   }
+  /***限制时间***/
+  disabledStartDate = (startValue) => {
+    if (!startValue) {
+      return false;
+    }
+    return startValue.valueOf() <= 1475251200000;
+  }
+
+  disabledEndDate = (endValue) => {
+    const startValue = this.state.startValue;
+    if (!endValue || !startValue) {
+      return true;
+    }
+    return endValue.valueOf() <= startValue.valueOf();
+  }
+
+  onChange = (field, value) => {
+    this.setState({
+      [field]: value,
+    });
+  }
+
+  onStartChange = (value) => {
+    this.onChange('startValue', value);
+  }
+
+  onEndChange = (value) => {
+    this.onChange('endValue', value);
+  }
+
+  handleStartOpenChange = (open) => {
+    if (!open) {
+      this.setState({ endOpen: true });
+    }
+  }
+
+  handleEndOpenChange = (open) => {
+    this.setState({ endOpen: open });
+  } 
   // 重置搜索
   handleFormReset = () => {
     const { form } = this.props;
@@ -77,6 +121,7 @@ class DataAnalysisWeek extends PureComponent{
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
     let {analysis:{shopName}} = this.props;
+    const { startValue, endValue, endOpen } = this.state;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -85,9 +130,17 @@ class DataAnalysisWeek extends PureComponent{
               {getFieldDecorator('udf1',{
                 rules: [{
                   required: true, message: '请选择查询开始时间',
-                }]
+                }],
+                initialValue: startValue
               })(
-                <MonthPicker style={{ width: '100%' }} format={dateFormat}/>
+                <MonthPicker 
+                  style={{ width: '100%' }} 
+                  format={dateFormat} 
+                  disabledDate={this.disabledStartDate}
+                  // value={startValue}
+                  onChange={this.onStartChange}
+                  onOpenChange={this.handleStartOpenChange}
+                />
               )}
             </FormItem>
           </Col>
@@ -96,9 +149,18 @@ class DataAnalysisWeek extends PureComponent{
               {getFieldDecorator('udf2',{
                 rules: [{
                   required: true, message: '请选择查询结束时间',
-                }]
+                }],
+                initialValue: endValue
               })(
-                <MonthPicker style={{ width: '100%' }} format={dateFormat}/>
+                <MonthPicker 
+                  style={{ width: '100%' }}
+                  format={dateFormat}
+                  disabledDate={this.disabledEndDate}
+                  // value={endValue}
+                  onChange={this.onEndChange}
+                  open={endOpen}
+                  onOpenChange={this.handleEndOpenChange}
+                />
               )}
             </FormItem>
           </Col>

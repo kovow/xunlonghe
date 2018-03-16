@@ -120,7 +120,7 @@ export const getNavData = app => [
           name: '监控台',
           icon: 'dashboard',
           path: 'park_sys/p_dashboard',
-          component: dy(app, ['chart'], ()=> import('../routes/Dashboard/index'))
+          component: dy(app, [], ()=> import('../routes/Dashboard/index'))
         }]
       },
       {
@@ -131,7 +131,7 @@ export const getNavData = app => [
           name: '监控台',
           icon: 'dashboard',
           path: 'ers_sys/e_dashboard',
-          component: dy(app, ['chart'], ()=> import('../routes/ParkCart/index')),
+          component: dy(app, [], ()=> import('../routes/ParkCart/index')),
         },{
           name: '资源管理',
           icon: 'calculator',
@@ -140,15 +140,15 @@ export const getNavData = app => [
             name: '添加资源',
             path: 'add',
             icon: 'plus-square',
-            component: dy(app, ['form'], ()=> import('../routes/ParkCart/index')),
+            component: dy(app, [], ()=> import('../routes/ParkCart/index')),
             children: [
               {
                 path: 'confirm',
-                component: dy(app, ['form'], ()=> import('../routes/ParkCart/index')),
+                component: dy(app, [], ()=> import('../routes/ParkCart/index')),
               },
               {
                 path: 'result',
-                component: dy(app, ['form'], ()=> import('../routes/ParkCart/index')),
+                component: dy(app, [], ()=> import('../routes/ParkCart/index')),
               },
             ],
           }]
@@ -162,7 +162,7 @@ export const getNavData = app => [
           name: '监控台',
           icon: 'dashboard',
           path: 'bus_sys/b_dashboard',
-          component: dy(app, ['chart'], ()=> import('../routes/ParkCart/index')),
+          component: dy(app, [], ()=> import('../routes/ParkCart/index')),
         }]
       },
       {
@@ -307,6 +307,11 @@ export const getNavData = app => [
             component: dy(app,['rule'],()=>import('../routes/Wxmall/order/YhOrderList'))
           }]
         }]
+      },{
+        name: '团票管理',
+        path: 'business/ticket',
+        icon: 'profile',
+        component: dy(app,['print'],()=>import('../routes/PrintLodop/index'))
       },
       {
         name: '数据分析系统',

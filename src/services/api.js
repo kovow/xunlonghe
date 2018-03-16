@@ -224,3 +224,28 @@ export async function updateShopArea(payload){
     }
   }
 }
+/**************   票务  ***************/ 
+// 获取团体票务
+export async function queryNote(){
+  return http.get('/admin/api/wxmall_sys/ticket/note/all');
+}
+// 添加旅行社
+export async function submitAgency(payload){
+  return http.post('/admin/api/wxmall_sys/ticket/agency/add',payload);
+}
+//获取门票类型
+export async function queryNoteCategory(){
+  return http.get('/admin/api/wxmall_sys/ticket/type/all');
+}
+// 获取旅行社
+export async function queryAgency(){
+  return http.get('/admin/api/wxmall_sys/ticket/agency/get');
+}
+// 添加门票信息
+export async function submitNot(payload){
+  return http.post('/admin/api/wxmall_sys/ticket/note/add',payload);
+}
+// 打印内容
+export async function queryPrint(id){
+  return http.get(`/admin/api/wxmall_sys/ticket/note/print?id=${id}`);
+}
