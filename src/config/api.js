@@ -4,10 +4,11 @@
 // export const baseApi = 'http://192.168.1.205:8081';
 let baseApi = '';
 if (process.env.NODE_ENV == 'development') {
-  // baseApi = 'http://192.168.1.205:8081'
-  baseApi = 'http://hhs.ngrok.xiaomiqiu.cn'
+  // baseApi = 'http://192.168.1.205:8081';
+  // baseApi = 'http://hhs.ngrok.xiaomiqiu/.cn';
+  baseApi = 'http://admin.zlxlhwl.com';
 }else{
-  baseApi = 'http://admin.zlxlhwl.com'
+  baseApi = 'http://admin.zlxlhwl.com';
 }
 export{
   baseApi

@@ -51,6 +51,12 @@ export function middleware(history){
                 Cookies.remove('permission');
                 return history.push('/user/403');
             }
+            if(response.data.status !== '200'){
+                notification.error({
+                    message: response.data.msg,
+                    description: response.data.msg
+                });
+            }
             return response
         },
         (error)=>{

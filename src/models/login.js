@@ -15,62 +15,74 @@ export default {
 
   effects: {
     // 登入
-    *accountSubmit({ payload }, { call, put,selected }) {
-      yield put({
-        type: 'changeSubmitting',
-        payload: true,
-      });
-      const response = yield call(fakeAccountLogin, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response
-      });
-      if(response.data.status === '200'){
-        yield (isEmpty(response.data.result.userInfo)?null : Cookies.set('userInfo',response.data.result.userInfo));
-        let token = yield (isEmpty(response.data.result.token)?null:response.data.result.token);
+    *accountSubmit({ payload }, { call, put }) {
+      try{
         yield put({
-          type: 'setToken',
-          payload: token
+          type: 'changeSubmitting',
+          payload: true,
         });
+        const response = yield call(fakeAccountLogin, payload);
         yield put({
-          type: 'fetchPermission'
+          type: 'changeLoginStatus',
+          payload: response
         });
-      }
-      yield put({
-        type: 'changeSubmitting',
-        payload: false,
-      });
+        if(response.data.status === '200'){
+          yield (isEmpty(response.data.result.userInfo)?null : Cookies.set('userInfo',response.data.result.userInfo));
+          let token = yield (isEmpty(response.data.result.token)?null:response.data.result.token);
+          yield put({
+            type: 'setToken',
+            payload: token
+          });
+          yield put({
+            type: 'fetchPermission'
+          });
+        }
+        yield put({
+          type: 'changeSubmitting',
+          payload: false,
+        });
+      }catch(err){}
     },
     // 注销登入
     *logout({url}, { call, put }) {
-      const response = yield call(userLogout);
-      if(response.data.status === '200'){
-        message.success('注销成功');
-        yield Cookies.remove('token');
-        yield Cookies.remove('userInfo');
-        yield Cookies.remove('permission');
-        yield put({type:'clearLogin'});
-        yield put(routerRedux.push(url));
-      }
+      try{
+        const response = yield call(userLogout);
+        if(response.data.status === '200'){
+          message.success('注销成功');
+          yield Cookies.remove('token');
+          yield Cookies.remove('userInfo');
+          yield Cookies.remove('permission');
+          yield put({type:'clearLogin'});
+          yield put(routerRedux.push(url));
+        }
+      }catch(err){}
     },
     // 设置token请求头
     *setToken({payload},{call,put}){
-      yield put({
-        type: 'changeTokenStatus',
-        payload: payload
-      });
-      yield Cookies.set('token',payload);
-      yield call(httpToken,payload);
+      try{
+        yield put({
+          type: 'changeTokenStatus',
+          payload: payload
+        });
+        yield Cookies.set('token',payload);
+        yield call(httpToken,payload);
+      }catch(err){
+
+      }
     },
      //获取权限信息
     *fetchPermission(_,{call,put}){
-      const response = yield call(queryPermission);
-      let permission = yield (isEmpty(response.data.result)?[]:response.data.result);
-      yield Cookies.set('permission',permission);
-      yield put({
-        type: 'getPermission',
-        payload: permission
-      });
+      try{
+        const response = yield call(queryPermission);
+        let permission = yield (isEmpty(response.data.result)?[]:response.data.result);
+        yield Cookies.set('permission',permission);
+        yield put({
+          type: 'getPermission',
+          payload: permission
+        });
+      }catch(err){
+
+      }
     },
   },
 

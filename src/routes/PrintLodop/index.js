@@ -6,9 +6,12 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import TableList from '../../components/Table/index';
 import styles from '../Setting/TableList.less';
 import Cookies from '../../vendor/js.cookie.js';
+import moment from 'moment'; //时间格式化插件
 const FormItem = Form.Item;
 const { Option } = Select;
 const { TextArea } = Input;
+const {RangePicker} = DatePicker;
+const dateFormat = 'YYYY-MM-DD';
 @connect(state=>({
   print: state.print
 }))
@@ -33,6 +36,44 @@ export default class PrintLodop extends PureComponent{
   // 搜索事件
   handleSearch = (e) => {
     e.preventDefault();
+    const {form:{getFieldValue},dispatch} = this.props;
+    if(!getFieldValue('agencyId') && !getFieldValue('ticketTypeId') && !getFieldValue('queryDate')){
+      dispatch({
+        type:'print/fetch'
+      });
+    }else{
+      if(getFieldValue('agencyId') && getFieldValue('ticketTypeId') && getFieldValue('queryDate')){
+        dispatch({
+          type:'print/fetch',
+          payload: Object.assign({},{agencyId:getFieldValue('agencyId'),ticketTypeId:getFieldValue('ticketTypeId'),startDate:getFieldValue('queryDate')[0].format('YYYY-MM-DD'),endDate:getFieldValue('queryDate')[1].format('YYYY-MM-DD')})
+        });
+      }
+      if(getFieldValue('agencyId') && getFieldValue('ticketTypeId') && !getFieldValue('queryDate')){
+        dispatch({
+          type:'print/fetch',
+          payload: Object.assign({},{agencyId:getFieldValue('agencyId'),ticketTypeId:getFieldValue('ticketTypeId')})
+        });
+      }
+      if(getFieldValue('agencyId') && !getFieldValue('ticketTypeId') && !getFieldValue('queryDate')){
+        dispatch({
+          type:'print/fetch',
+          payload: Object.assign({},{agencyId:getFieldValue('agencyId')})
+        });
+      }
+      if(!getFieldValue('agencyId') && getFieldValue('ticketTypeId') && getFieldValue('queryDate')){
+        dispatch({
+          type:'print/fetch',
+          payload: Object.assign({},{ticketTypeId:getFieldValue('ticketTypeId'),startDate:getFieldValue('queryDate')[0].format('YYYY-MM-DD'),endDate:getFieldValue('queryDate')[1].format('YYYY-MM-DD')})
+        });
+      }
+      if(!getFieldValue('agencyId') && !getFieldValue('ticketTypeId') && getFieldValue('queryDate')){
+        dispatch({
+          type:'print/fetch',
+          payload: Object.assign({},{startDate:getFieldValue('queryDate')[0].format('YYYY-MM-DD'),endDate:getFieldValue('queryDate')[1].format('YYYY-MM-DD')})
+        });
+      }
+    }
+
   }
   // 展开高级搜索
   toggleForm = () => {
@@ -49,22 +90,28 @@ export default class PrintLodop extends PureComponent{
   // 渲染搜索表单
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
+    const {print:{agency,category}} = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="规则编号">
-              {getFieldDecorator('no')(
-                <Input placeholder="请输入" />
+            <FormItem label="旅行社">
+              {getFieldDecorator('agencyId')(
+                <Select placeholder="请选择旅行社名称" style={{ width: '100%' }}>
+                  {agency &&  agency.map((item,index)=>{
+                    return <Option value={item.id} key={index}>{item.agencyName}</Option>
+                  })}
+                </Select>
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
+            <FormItem label="门票类型">
+              {getFieldDecorator('ticketTypeId')(
+                <Select placeholder="请选择票务类型" style={{ width: '100%' }} onChange={this.handleTicketType}>
+                  {category &&  category.map((item,index)=>{
+                    return <Option value={item.id} key={index}>{item.name}</Option>
+                  })}
                 </Select>
               )}
             </FormItem>
@@ -85,72 +132,53 @@ export default class PrintLodop extends PureComponent{
 
   renderAdvancedForm() {
     const { getFieldDecorator } = this.props.form;
+    const {print:{agency,category}} = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="规则编号">
-              {getFieldDecorator('no')(
-                <Input placeholder="请输入" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
+        <Col md={12} sm={24}>
+            <FormItem label="旅行社">
+              {getFieldDecorator('agencyId')(
+                <Select placeholder="请选择旅行社名称" style={{ width: '100%' }}>
+                  {agency &&  agency.map((item,index)=>{
+                    return <Option value={item.id} key={index}>{item.agencyName}</Option>
+                  })}
                 </Select>
               )}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="调用次数">
-              {getFieldDecorator('number')(
-                <InputNumber style={{ width: '100%' }} />
+          <Col md={12} sm={24}>
+            <FormItem label="门票类型">
+              {getFieldDecorator('ticketTypeId')(
+                <Select placeholder="请选择票务类型" style={{ width: '100%' }} onChange={this.handleTicketType}>
+                  {category &&  category.map((item,index)=>{
+                    return <Option value={item.id} key={index}>{item.name}</Option>
+                  })}
+                </Select>
               )}
             </FormItem>
           </Col>
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="更新日期">
-              {getFieldDecorator('date')(
-                <DatePicker style={{ width: '100%' }} placeholder="请输入更新日期" />
+          <Col md={12} sm={24}>
+            <FormItem label="查询时间">
+              {getFieldDecorator('queryDate')(
+                <RangePicker style={{ width: '100%' }} format={dateFormat}/>
               )}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status3')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status4')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
-              )}
-            </FormItem>
+          <Col md={12} sm={24}>
+            <div style={{ overflow: 'hidden' }}>
+              <span style={{ float: 'right', marginBottom: 24 }}>
+                <Button type="primary" htmlType="submit">查询</Button>
+                <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
+                <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
+                  收起 <Icon type="up" />
+                </a>
+              </span>
+            </div>
           </Col>
         </Row>
-        <div style={{ overflow: 'hidden' }}>
-          <span style={{ float: 'right', marginBottom: 24 }}>
-            <Button type="primary" htmlType="submit">查询</Button>
-            <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
-            <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-              收起 <Icon type="up" />
-            </a>
-          </span>
-        </div>
       </Form>
     );
   }
@@ -167,19 +195,13 @@ export default class PrintLodop extends PureComponent{
   // 添加区域1 modal
   handleModalVisibleOne = () => {
     const {dispatch} = this.props;
-    dispatch({
-      type: 'print/fetchCategory'
-    });
-    dispatch({
-      type: 'print/fetchAgency'
-    });
     this.setState({
       modalVisibleOne: !this.state.modalVisibleOne,
     });
   }
   // 售票联
   handleInitLodapOne = (data)=>{
-    this.state.app.PRINT_INIT("打印团体票");
+    // this.state.app.PRINT_INIT("打印团体票");
     this.state.app.ADD_PRINT_TEXT(15,40,150,30,"票务客户联");
     this.state.app.SET_PRINT_STYLEA(1,"FontSize",10);
     this.state.app.SET_PRINT_STYLEA(1,"Bold",1);
@@ -232,9 +254,9 @@ export default class PrintLodop extends PureComponent{
     // 线条
     this.state.app.ADD_PRINT_LINE(215,14,215,510,0,1);
 
-    this.state.app.ADD_PRINT_TEXT(230,20,150,20,"合计金额："+data.totalPrice);
+    // this.state.app.ADD_PRINT_TEXT(230,20,150,20,"合计金额："+data.totalPrice);
     // 20 remark
-    this.state.app.ADD_PRINT_TEXT(250,20,150,50,"备注："+data.remark);
+    this.state.app.ADD_PRINT_TEXT(230,20,150,50,"备注："+data.remark);
     // this.state.app.ADD_PRINT_LINE(iCurLine,14,iCurLine,510,0,1);
     this.state.app.ADD_PRINT_TEXT(290,20,165,20,"打印时间：");
     this.state.app.ADD_PRINT_TEXT(305,20,165,20,(new Date()).toLocaleDateString()+" "+(new Date()).toLocaleTimeString());
@@ -249,7 +271,7 @@ export default class PrintLodop extends PureComponent{
   }
   // 检票联
   handleInitLodapTwo = (data)=>{
-    // this.state.app.PRINT_INIT("打印团体票");
+    this.state.app.PRINT_INIT("打印团体票");
     this.state.app.ADD_PRINT_TEXT(15,40,150,30,"票务售票联");
     this.state.app.SET_PRINT_STYLEA(1,"FontSize",10);
     this.state.app.SET_PRINT_STYLEA(1,"Bold",1);
@@ -302,7 +324,7 @@ export default class PrintLodop extends PureComponent{
     // 线条
     this.state.app.ADD_PRINT_LINE(215,14,215,510,0,1);
 
-    // this.state.app.ADD_PRINT_TEXT(230,20,150,20,"合计金额："+data.quantity);
+    this.state.app.ADD_PRINT_TEXT(230,20,150,20,"合计金额："+data.quantity);
     // 20 remark
     this.state.app.ADD_PRINT_TEXT(250,20,150,50,"备注："+data.remark);
     // this.state.app.ADD_PRINT_LINE(iCurLine,14,iCurLine,510,0,1);
@@ -398,6 +420,12 @@ export default class PrintLodop extends PureComponent{
     dispatch({
       type:'print/fetch'
     });
+    dispatch({
+      type: 'print/fetchCategory'
+    });
+    dispatch({
+      type: 'print/fetchAgency'
+    });
   }
   // 打印小票
   handlePrint = (record)=>{
@@ -413,9 +441,9 @@ export default class PrintLodop extends PureComponent{
           okText: '确认',
           cancelText: '取消',
           onOk: async ()=>{
-            await this.handleInitLodapOne(data.result[0]);
             await this.handleInitLodapTwo(data.result[1]);
             await this.handleInitLodapThree(data.result[2]);
+            await this.handleInitLodapOne(data.result[0]);
           }
         });
       }

@@ -7,19 +7,24 @@ export default {
   },
   effects: {
     *fetchMenus(_,{call,put,}) {
-      yield put({
+      try{
+        yield put({
           type: 'changeLoading',
           payload: true
-      });
-      const res = yield call(getMenus);
-      yield put({
-        type: 'saveMenus',
-        payload: res.data
-      });
-      yield put({
-        type: 'changeLoading',
-        payload: false
-      });
+        });
+        const res = yield call(getMenus);
+        if(res.data.status === '200'){
+          yield put({
+            type: 'saveMenus',
+            payload: res.data.result
+          });
+        }
+        yield put({
+          type: 'changeLoading',
+          payload: false
+        });
+      }catch(err){
+      }
     }
   },
   reducers: {
@@ -32,7 +37,7 @@ export default {
     saveMenus(state,action){
       return {
         ...state,
-        menus: action.payload.result
+        menus: action.payload
       }
     }
   }

@@ -226,8 +226,24 @@ export async function updateShopArea(payload){
 }
 /**************   票务  ***************/ 
 // 获取团体票务
-export async function queryNote(){
-  return http.get('/admin/api/wxmall_sys/ticket/note/all');
+export async function queryNote(payload){
+  if(payload){
+    if(payload.agencyId && payload.ticketTypeId && payload.startDate && payload.endDate){
+      return http.get(`/admin/api/wxmall_sys/ticket/note/all?agencyId=${payload.agencyId}&ticketTypeId=${payload.ticketTypeId}&startDate=${payload.startDate}&endDate=${payload.endDate}`);  
+    }else if(payload.agencyId && payload.ticketTypeId && !payload.startDate && !payload.endDate){
+      return http.get(`/admin/api/wxmall_sys/ticket/note/all?agencyId=${payload.agencyId}&ticketTypeId=${payload.ticketTypeId}`);
+    }else if(payload.agencyId && !payload.ticketTypeId && !payload.startDate && !payload.endDate){
+      return http.get(`/admin/api/wxmall_sys/ticket/note/all?agencyId=${payload.agencyId}`);
+    }else if(!payload.agencyId && payload.ticketTypeId && !payload.startDate && !payload.endDate){
+      return http.get(`/admin/api/wxmall_sys/ticket/note/all?ticketTypeId=${payload.ticketTypeId}`);
+    }else if(!payload.agencyId && payload.ticketTypeId && payload.startDate && payload.endDate){
+      return http.get(`/admin/api/wxmall_sys/ticket/note/all?ticketTypeId=${payload.ticketTypeId}&startDate=${payload.startDate}&endDate=${payload.endDate}`);
+    }else if(!payload.agencyId && !payload.ticketTypeId && payload.startDate && payload.endDate){
+      return http.get(`/admin/api/wxmall_sys/ticket/note/all?startDate=${payload.startDate}&endDate=${payload.endDate}`);
+    }
+  }else{
+    return http.get('/admin/api/wxmall_sys/ticket/note/all');
+  }
 }
 // 添加旅行社
 export async function submitAgency(payload){
