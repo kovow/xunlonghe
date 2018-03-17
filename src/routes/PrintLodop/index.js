@@ -324,7 +324,7 @@ export default class PrintLodop extends PureComponent{
     // 线条
     this.state.app.ADD_PRINT_LINE(215,14,215,510,0,1);
 
-    this.state.app.ADD_PRINT_TEXT(230,20,150,20,"合计金额："+data.quantity);
+    this.state.app.ADD_PRINT_TEXT(230,20,150,20,"合计金额："+data.totalPrice);
     // 20 remark
     this.state.app.ADD_PRINT_TEXT(250,20,150,50,"备注："+data.remark);
     // this.state.app.ADD_PRINT_LINE(iCurLine,14,iCurLine,510,0,1);
@@ -393,7 +393,7 @@ export default class PrintLodop extends PureComponent{
     // 线条
     this.state.app.ADD_PRINT_LINE(215,14,215,510,0,1);
 
-    // this.state.app.ADD_PRINT_TEXT(230,20,150,20,"合计金额："+data.quantity);
+    // this.state.app.ADD_PRINT_TEXT(230,20,150,20,"合计金额："+data.totalPrice);
     // 20 remark
     this.state.app.ADD_PRINT_TEXT(250,20,150,50,"备注："+data.remark);
     // this.state.app.ADD_PRINT_LINE(iCurLine,14,iCurLine,510,0,1);

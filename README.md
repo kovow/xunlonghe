@@ -22,6 +22,8 @@
 [![示例图片1](./screen/01.gif) "示例图片1")](https://github.com/whevether/xunlonghe.git "示例")
 [![示例图片2](./screen/02.gif) "示例图片2")](https://github.com/whevether/xunlonghe.git "示例")
 [![示例图片3](./screen/03.gif) "示例图片3")](https://github.com/whevether/xunlonghe.git "示例")
+[![打印小票数据](./screen/04.gif) "示例图片3")](https://github.com/whevether/xunlonghe.git "打印小票")
+[![小票图片](./screen/05.png) "示例图片3")](https://github.com/whevether/xunlonghe.git "小票")
 ## 使用
 
 ```bash
