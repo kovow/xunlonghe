@@ -441,9 +441,9 @@ export default class PrintLodop extends PureComponent{
           okText: '确认',
           cancelText: '取消',
           onOk: async ()=>{
-            await this.handleInitLodapTwo(data.result[1]);
-            await this.handleInitLodapThree(data.result[2]);
-            await this.handleInitLodapOne(data.result[0]);
+            await this.handleInitLodapTwo(data.result[0]);
+            await this.handleInitLodapThree(data.result[1]);
+            await this.handleInitLodapOne(data.result[2]);
           }
         });
       }

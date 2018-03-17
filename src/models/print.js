@@ -57,10 +57,12 @@ export default {
           payload: true,
         });
         const response = yield call(queryNoteCategory,payload);
-        yield put({
-          type: 'saveCategory',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'saveCategory',
+            payload: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -76,10 +78,12 @@ export default {
           payload: true,
         });
         const response = yield call(queryAgency,payload);
-        yield put({
-          type: 'saveAgency',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'saveAgency',
+            payload: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -139,20 +143,20 @@ export default {
       };
     },
     saveCategory(state, action) {
-      if(action.payload.data.status === '200'){
-        return {
-          ...state,
-          category: action.payload.data.result,
-        };
-      }
+      // if(action.payload.data.status === '200'){
+      return {
+        ...state,
+        category: action.payload,
+      };
+      // }
     },
     saveAgency(state, action) {
-      if(action.payload.data.status === '200'){
-        return {
-          ...state,
-          agency: action.payload.data.result,
-        };
-      }
+      // if(action.payload.data.status === '200'){
+      return {
+        ...state,
+        agency: action.payload,
+      };
+      // }
     },
     changeLoading(state, action) {
       return {

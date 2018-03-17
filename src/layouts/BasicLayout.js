@@ -72,6 +72,9 @@ class BasicLayout extends React.PureComponent {
       //   type: 'login/fetchPermission'
       // });
   }
+  // componentDidCatch(err,info){
+  //   console.log(err,info);
+  // }
   // 页面卸载清理响应式
   componentWillUnmount() {
     clearTimeout(this.resizeTimeout);
