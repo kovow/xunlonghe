@@ -14,8 +14,8 @@ export default ChildComponent => {
       const props = this.props;
       // console.log(map.get('permission'));
       if(token){ 
-        let permission = props.permission.length >0 ? props.permission : props.loginPermission;
-        var map = Map().set('permission',permission); 
+        // let permission = props.permission.length >0 ? props.permission : props.loginPermission;
+        var map = Map().set('permission',props.permission); 
         if(map.get('permission').length >0){
           let pathname = props.location.pathname;
           if(pathname === '/'){

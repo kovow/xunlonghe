@@ -21,7 +21,7 @@ export default class Login extends Component {
 
   componentWillReceiveProps(nextProps) {
     // 检查是否存在token 并且 权限已经获取了。如果已经获取了允许跳转到后台
-    if ((nextProps.login.token !== null && nextProps.login.permission.length >0) || (Cookies.get('token') && nextProps.global.permission.length >0)) {
+    if ((nextProps.login.token !== null && nextProps.global.permission.length >0) || (Cookies.get('token') && nextProps.global.permission.length >0)) {
       this.props.dispatch(routerRedux.push('/'));
     }
   }

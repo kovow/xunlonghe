@@ -1,5 +1,11 @@
 import moment from 'moment';
-
+import {message} from 'antd';
+// model 错误提示信息
+export function errorMessage(message){
+  message.error({
+    message:message
+  });
+}
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
 }

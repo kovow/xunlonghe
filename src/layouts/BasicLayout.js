@@ -216,7 +216,7 @@ class BasicLayout extends React.PureComponent {
   }
   // 渲染
   render() {
-    const { currentUser, collapsed, fetchingNotices, getRouteData,menus } = this.props;
+    const { currentUser, collapsed,  getRouteData,menus } = this.props;
     let userInfo = JSON.parse(Cookies.get('userInfo'));
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
@@ -340,7 +340,7 @@ class BasicLayout extends React.PureComponent {
 
 export default connect(state => ({
   menus: state.menus.menus,
-  collapsed: state.global.collapsed,
-  fetchingNotices: state.global.fetchingNotices,
-  notices: state.global.notices,
+  collapsed: state.global.collapsed
+  // fetchingNotices: state.global.fetchingNotices,
+  // notices: state.global.notices,
 }))(requireAuth(BasicLayout));

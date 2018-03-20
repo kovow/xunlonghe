@@ -129,7 +129,7 @@ class Merchant extends PureComponent {
   }
   render() {
     // 表格数据
-    const {analysis: { loading,data,totalCount,totalPage}} = this.props;
+    const {analysis: { loading,data,totalCount,totalPage,sumInfo}} = this.props;
     // 表格列数据
     const columns = [{
       title: '商家编码',
@@ -185,6 +185,7 @@ class Merchant extends PureComponent {
               data={data}
               columns={columns}
             />
+             {sumInfo && <div style={{textAlign:'right',fontSize:18,padding:'.5rem'}}>商品总价:{sumInfo.amount}元</div>}
           </div>
         </Card>
       </PageHeaderLayout>

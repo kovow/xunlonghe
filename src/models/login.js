@@ -9,7 +9,7 @@ export default {
 
   state: {
     token: null,
-    permission: [],
+    // permission: [],
     loginStatus: null
   },
 
@@ -34,7 +34,7 @@ export default {
             payload: token
           });
           yield put({
-            type: 'fetchPermission'
+            type: 'global/fetchPermission'
           });
         }
         yield put({
@@ -71,29 +71,29 @@ export default {
       }
     },
      //获取权限信息
-    *fetchPermission(_,{call,put}){
-      try{
-        const response = yield call(queryPermission);
-        let permission = yield (isEmpty(response.data.result)?[]:response.data.result);
-        yield Cookies.set('permission',permission);
-        yield put({
-          type: 'getPermission',
-          payload: permission
-        });
-      }catch(err){
+    // *fetchPermission(_,{call,put}){
+    //   try{
+    //     const response = yield call(queryPermission);
+    //     let permission = yield (isEmpty(response.data.result)?[]:response.data.result);
+    //     yield Cookies.set('permission',permission);
+    //     yield put({
+    //       type: 'getPermission',
+    //       payload: permission
+    //     });
+    //   }catch(err){
 
-      }
-    },
+    //   }
+    // },
   },
 
   reducers: {
     // 权限
-    getPermission(state,action){
-      return{
-        ...state,
-        permission: action.payload
-      }
-    },
+    // getPermission(state,action){
+    //   return{
+    //     ...state,
+    //     permission: action.payload
+    //   }
+    // },
     // 清除登入信息
     clearLogin(state,action){
       return{

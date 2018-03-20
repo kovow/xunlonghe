@@ -17,10 +17,12 @@ export default {
           payload: true,
         });
         const response = yield call(queryRoleList,payload);
-        yield put({
-          type: 'save',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'save',
+            data: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -38,10 +40,12 @@ export default {
           type: 'fetchPermissionList'
         });
         const response = yield call(queryEditRole,id);
-        yield put({
-          type: 'edit',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'edit',
+            editData: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -57,10 +61,12 @@ export default {
           payload: true,
         });
         const response = yield call(queryUserList,payload);
-        yield put({
-          type: 'save',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'save',
+            data: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -75,10 +81,12 @@ export default {
           payload: true,
         });
         const response = yield call(queryPermissionList,payload);
-        yield put({
-          type: 'save',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'save',
+            data: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -96,10 +104,12 @@ export default {
           type: 'fetchRoleList'
         });
         const response = yield call(queryEditUser,id);
-        yield put({
-          type: 'edit',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'edit',
+            editData: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -207,24 +217,16 @@ export default {
       };
     },
     save(state, action) {
-      if(action.payload.data.status === '200'){
-        return {
-          ...state,
-          data: action.payload.data.result,
-        };
-      }
+      return {
+        ...state,
+        data: action.data,
+      };
     },
     edit(state, action) {
-      if(action.payload.data.status === '200'){
-        return {
-          ...state,
-          editData: action.payload.data.result,
-        };
-      }else{
-        return{
-          ...state
-        }
-      }
+      return {
+        ...state,
+        editData: action.editData,
+      };
     },
   },
 };

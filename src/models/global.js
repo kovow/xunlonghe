@@ -2,6 +2,7 @@ import { queryPermission } from '../services/api';
 import Cookies from '../vendor/js.cookie.js';
 import { httpToken } from '../utils/ajax';
 import {isEmpty} from 'lodash';
+import {errorMessage} from '../utils/utils';
 export default {
   namespace: 'global',
 
@@ -13,20 +14,30 @@ export default {
   effects: {
     //获取权限信息
     *fetchPermission(_,{call,put}){
-      const response = yield call(queryPermission);
-      let permission = yield (isEmpty(response.data.result)?[]:response.data.result);
-      yield Cookies.set('permission',permission);
-      yield put({
-        type: 'getPermission',
-        payload: permission
-      });
+      try{
+        const response = yield call(queryPermission);
+        if(response.data.status === '200'){
+          let permission = yield (isEmpty(response.data.result)?[]:response.data.result);
+          yield Cookies.set('permission',permission);
+          yield put({
+            type: 'getPermission',
+            payload: permission
+          });
+        }
+      }catch(err){
+        errorMessage('获取权限信息失败');
+      }
     },
     *setToken({payload},{call,put}){
-      yield Cookies.set('token',payload);
-      yield call(httpToken,payload);
-      yield yield put({
-        type: 'fetchPermission'
-      });
+      try{
+        yield Cookies.set('token',payload);
+        yield call(httpToken,payload);
+        yield yield put({
+          type: 'fetchPermission'
+        });
+      }catch(err){
+        errorMessage('设置token失败');
+      }
     },
   },
 

@@ -267,7 +267,7 @@ export default class SalesDetails extends React.Component {
   }
   render() {
     // 表格数据
-    const {analysis: { loading,data,totalCount,totalPage}} = this.props;
+    const {analysis: { loading,data,totalCount,totalPage,sumInfo}} = this.props;
     // 表格列数据
     const columns = [{
       title: '订单编号',
@@ -357,6 +357,7 @@ export default class SalesDetails extends React.Component {
               columns={columns}
               pagination={false}      
             />
+            {sumInfo && <div style={{textAlign:'right',fontSize:18,padding:'.5rem'}}>商品总价:{sumInfo.amount}元</div>}
             <div className={styles.pagination}>
               <Pagination showSizeChanger onShowSizeChange={this.onShowSizeChange} defaultCurrent={1} total={totalCount} pageSizeOptions={['10','15','20','25','30','35','40','45','50','100']} onChange={this.handlePagination}/>
             </div>

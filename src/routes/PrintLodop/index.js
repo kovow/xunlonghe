@@ -37,36 +37,42 @@ export default class PrintLodop extends PureComponent{
   handleSearch = (e) => {
     e.preventDefault();
     const {form:{getFieldValue},dispatch} = this.props;
-    if(!getFieldValue('agencyId') && !getFieldValue('ticketTypeId') && !getFieldValue('queryDate')){
+    if(!getFieldValue('agId') && !getFieldValue('tkTypeId') && !getFieldValue('queryDate')){
       dispatch({
         type:'print/fetch'
       });
     }else{
-      if(getFieldValue('agencyId') && getFieldValue('ticketTypeId') && getFieldValue('queryDate')){
+      if(getFieldValue('agId') && getFieldValue('tkTypeId') && getFieldValue('queryDate')){
         dispatch({
           type:'print/fetch',
-          payload: Object.assign({},{agencyId:getFieldValue('agencyId'),ticketTypeId:getFieldValue('ticketTypeId'),startDate:getFieldValue('queryDate')[0].format('YYYY-MM-DD'),endDate:getFieldValue('queryDate')[1].format('YYYY-MM-DD')})
+          payload: Object.assign({},{agencyId:getFieldValue('agId'),ticketTypeId:getFieldValue('tkTypeId'),startDate:getFieldValue('queryDate')[0].format('YYYY-MM-DD'),endDate:getFieldValue('queryDate')[1].format('YYYY-MM-DD')})
         });
       }
-      if(getFieldValue('agencyId') && getFieldValue('ticketTypeId') && !getFieldValue('queryDate')){
+      if(getFieldValue('agId') && getFieldValue('tkTypeId') && !getFieldValue('queryDate')){
         dispatch({
           type:'print/fetch',
-          payload: Object.assign({},{agencyId:getFieldValue('agencyId'),ticketTypeId:getFieldValue('ticketTypeId')})
+          payload: Object.assign({},{agencyId:getFieldValue('agId'),ticketTypeId:getFieldValue('tkTypeId')})
         });
       }
-      if(getFieldValue('agencyId') && !getFieldValue('ticketTypeId') && !getFieldValue('queryDate')){
+      if(getFieldValue('agId') && !getFieldValue('tkTypeId') && !getFieldValue('queryDate')){
         dispatch({
           type:'print/fetch',
-          payload: Object.assign({},{agencyId:getFieldValue('agencyId')})
+          payload: Object.assign({},{agencyId:getFieldValue('agId')})
         });
       }
-      if(!getFieldValue('agencyId') && getFieldValue('ticketTypeId') && getFieldValue('queryDate')){
+      if(!getFieldValue('agId') && getFieldValue('tkTypeId') && !getFieldValue('queryDate')){
         dispatch({
           type:'print/fetch',
-          payload: Object.assign({},{ticketTypeId:getFieldValue('ticketTypeId'),startDate:getFieldValue('queryDate')[0].format('YYYY-MM-DD'),endDate:getFieldValue('queryDate')[1].format('YYYY-MM-DD')})
+          payload: Object.assign({},{ticketTypeId:getFieldValue('tkTypeId')})
         });
       }
-      if(!getFieldValue('agencyId') && !getFieldValue('ticketTypeId') && getFieldValue('queryDate')){
+      if(!getFieldValue('agId') && getFieldValue('tkTypeId') && getFieldValue('queryDate')){
+        dispatch({
+          type:'print/fetch',
+          payload: Object.assign({},{ticketTypeId:getFieldValue('tkTypeId'),startDate:getFieldValue('queryDate')[0].format('YYYY-MM-DD'),endDate:getFieldValue('queryDate')[1].format('YYYY-MM-DD')})
+        });
+      }
+      if(!getFieldValue('agId') && !getFieldValue('tkTypeId') && getFieldValue('queryDate')){
         dispatch({
           type:'print/fetch',
           payload: Object.assign({},{startDate:getFieldValue('queryDate')[0].format('YYYY-MM-DD'),endDate:getFieldValue('queryDate')[1].format('YYYY-MM-DD')})
@@ -96,7 +102,7 @@ export default class PrintLodop extends PureComponent{
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="旅行社">
-              {getFieldDecorator('agencyId')(
+              {getFieldDecorator('agId')(
                 <Select placeholder="请选择旅行社名称" style={{ width: '100%' }}>
                   {agency &&  agency.map((item,index)=>{
                     return <Option value={item.id} key={index}>{item.agencyName}</Option>
@@ -107,7 +113,7 @@ export default class PrintLodop extends PureComponent{
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="门票类型">
-              {getFieldDecorator('ticketTypeId')(
+              {getFieldDecorator('tkTypeId')(
                 <Select placeholder="请选择票务类型" style={{ width: '100%' }} onChange={this.handleTicketType}>
                   {category &&  category.map((item,index)=>{
                     return <Option value={item.id} key={index}>{item.name}</Option>
@@ -138,7 +144,7 @@ export default class PrintLodop extends PureComponent{
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
         <Col md={12} sm={24}>
             <FormItem label="旅行社">
-              {getFieldDecorator('agencyId')(
+              {getFieldDecorator('agId')(
                 <Select placeholder="请选择旅行社名称" style={{ width: '100%' }}>
                   {agency &&  agency.map((item,index)=>{
                     return <Option value={item.id} key={index}>{item.agencyName}</Option>
@@ -149,7 +155,7 @@ export default class PrintLodop extends PureComponent{
           </Col>
           <Col md={12} sm={24}>
             <FormItem label="门票类型">
-              {getFieldDecorator('ticketTypeId')(
+              {getFieldDecorator('tkTypeId')(
                 <Select placeholder="请选择票务类型" style={{ width: '100%' }} onChange={this.handleTicketType}>
                   {category &&  category.map((item,index)=>{
                     return <Option value={item.id} key={index}>{item.name}</Option>
@@ -645,7 +651,7 @@ export default class PrintLodop extends PureComponent{
     }];
     return(
       <PageHeaderLayout title="团票管理">
-        {isDown && <font color='#FF00FF'>CLodop云打印服务(localhost本地)未安装启动!点击这里<a href='/static/CLodop_Setup_for_Win32NT.exe' target='_self'>执行安装</a>,安装后请刷新页面。</font>}
+        {isDown && <div className={styles.isNoPrint}>CLodop云打印服务(localhost本地)未安装启动!点击这里<a href='/static/CLodop_Setup_for_Win32NT.exe' target='_self'>执行安装</a>,安装后请刷新页面。</div>}
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>

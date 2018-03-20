@@ -25,10 +25,12 @@ export default {
           payload: true,
         });
         const response = yield call(queryShopList,payload);
-        yield put({
-          type: 'save',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'save',
+            data: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -44,10 +46,13 @@ export default {
           payload: true,
         });
         const response = yield call(uploadSigImg, url,payload);
-        yield put({
-          type: 'uploadSigInfo',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          message.success('上传成功');
+          yield put({
+            type: 'uploadSigInfo',
+            imgSig: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -85,10 +90,12 @@ export default {
           payload: true,
         });
         const response = yield call(queryShopProductList,payload);
-        yield put({
-          type: 'save',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'save',
+            data: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -126,10 +133,12 @@ export default {
           payload: true,
         });
         const response = yield call(queryQrcode);
-        yield put({
-          type: 'save',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'save',
+            data: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -144,10 +153,12 @@ export default {
           payload: true,
         });
         const response = yield call(queryTreeNodeCattegory);
-        yield put({
-          type: 'save',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'save',
+            data: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -162,10 +173,12 @@ export default {
           payload: true,
         });
         const response = yield call(queryCoupon);
-        yield put({
-          type: 'save',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'save',
+            data: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -228,10 +241,12 @@ export default {
           payload: true,
         });
         const response = yield call(queryUserManger);
-        yield put({
-          type: 'save',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'save',
+            data: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -247,10 +262,12 @@ export default {
           payload: true,
         });
         const response = yield call(removeRule, payload);
-        yield put({
-          type: 'save',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'save',
+            data: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -267,10 +284,12 @@ export default {
           payload: true,
         });
         const response = yield call(queryOrderList,payload);
-        yield put({
-          type: 'save',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'save',
+            data: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -286,10 +305,12 @@ export default {
           payload: true,
         });
         const response = yield call(queryOrderDetails,payload);
-        yield put({
-          type: 'details',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'details',
+            details: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -305,10 +326,12 @@ export default {
           payload: true,
         });
         const response = yield call(queryWxShop,payload);
-        yield put({
-          type: 'saveShopName',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'saveShopName',
+            shopName: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -324,10 +347,12 @@ export default {
           payload: true,
         });
         const response = yield call(queryYhOrder,payload);
-        yield put({
-          type: 'save',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'save',
+            data: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -343,10 +368,12 @@ export default {
           payload: true,
         });
         const response = yield call(queryYhOrderDetails,payload);
-        yield put({
-          type: 'details',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'details',
+            details: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -378,10 +405,12 @@ export default {
           payload: true,
         });
         const response = yield call(queryShopAreaAllList,payload);
-        yield put({
-          type: 'save',
-          payload: response,
-        });
+        if(response.data.status === '200'){
+          yield put({
+            type: 'save',
+            data: response.data.result,
+          });
+        }
         yield put({
           type: 'changeLoading',
           payload: false,
@@ -430,38 +459,27 @@ export default {
 
   reducers: {
     save(state, action) {
-      if(action.payload.data.status === '200'){
-        return {
-          ...state,
-          data: action.payload.data.result,
-        };
-      }
+      return {
+        ...state,
+        data: action.data,
+      };
     },
     details(state, action) {
-      if(action.payload.data.status === '200'){
-        return {
-          ...state,
-          details: action.payload.data.result,
-        };
-      }
+      return {
+        ...state,
+        details: action.details,
+      };
     },
     saveShopName(state,action){
-      if(action.payload.data.status === '200'){
-        return {
-          ...state,
-          shopName: action.payload.data.result
-        };
-      }
+      return {
+        ...state,
+        shopName: action.shopName
+      };
     },
     uploadSigInfo(state,action){
-      if(action.payload.data.status === '200'){
-        message.success('上传成功');
-        return {
-          ...state,
-          imgSig: action.payload.data.result
-        }
-      }else{
-        message.error('上传失败');
+      return {
+        ...state,
+        imgSig: action.imgSig
       }
     },
     changeLoading(state, action) {
