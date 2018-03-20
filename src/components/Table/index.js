@@ -20,6 +20,7 @@ class TableList extends PureComponent {
           rowKey={record => record.key}
           dataSource={data}
           columns={columns}
+          bordered
           pagination={pagetionsOptions}      
         />
       </div>

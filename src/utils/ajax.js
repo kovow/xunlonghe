@@ -16,7 +16,7 @@ http.defaults.headers.common = {
 export function httpToken(token) {
     http.defaults.headers.common.Authorization = `Bearer ${token}`;
 };
-export function middleware(history){
+export function middleware(history,store){
         // 请求拦截
     http.interceptors.request.use((config) => {
         return config;
@@ -49,14 +49,17 @@ export function middleware(history){
                 Cookies.remove('token');
                 Cookies.remove('userInfo');
                 Cookies.remove('permission');
+                store.dispatch({
+                    type: 'login/clearLogin'
+                });
                 return history.push('/user/403');
             }
-            if(response.data.status !== '200'){
-                notification.error({
-                    message: response.data.msg,
-                    description: response.data.msg
-                });
-            }
+            // if(response.data.status !== '200'){
+            //     notification.error({
+            //         message: response.data.msg,
+            //         description: response.data.msg
+            //     });
+            // }
             return response
         },
         (error)=>{

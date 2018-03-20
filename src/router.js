@@ -49,7 +49,7 @@ function RouterConfig({ history, app }) {
     },
   };
   // 添加中间件
-  middleware(history);
+  middleware(history,app._store);
   return (
     <LocaleProvider locale={zhCN}>
       <Router history={history}>

@@ -218,21 +218,22 @@ export default class SalesDetails extends React.Component {
         'sidx':'value',
         'sord':'asc'
       }
-    });
-    // // 获取商家名称
-    dispatch({
-      type: 'analysis/fetchShopName',
-      payload:{
-        'dictName':'Shop',
-        'pName': '',
-        'pValue': '',
-        'search':false,
-        'nd': new Date().getTime(),
-        'rows': 100,
-        'page':1,
-        'sidx':'value',
-        'sord':'asc'
-      }
+    }).then(()=>{
+      // // 获取商家名称 因为再一个接口同时获取回宝异常.  等待一个获取完后再获取另外一个
+      dispatch({
+        type: 'analysis/fetchShopName',
+        payload:{
+          'dictName':'Shop',
+          'pName': '',
+          'pValue': '',
+          'search':false,
+          'nd': new Date().getTime(),
+          'rows': 100,
+          'page':1,
+          'sidx':'value',
+          'sord':'asc'
+        }
+      });
     });
   }
   // 每页显示多少条数据

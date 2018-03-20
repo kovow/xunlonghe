@@ -1,12 +1,12 @@
 import React,{PureComponent} from 'react';
 import {connect} from 'dva';
-import {Row, Col, Card, Form, Input, Select, Button,  InputNumber, DatePicker,  message,Icon,Modal} from 'antd';
+import {Row, Col, Card, Form, Input, Select, Button,  InputNumber, DatePicker,  message,Icon,Modal,Table} from 'antd';
 // 面包屑头
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import TableList from '../../components/Table/index';
 import styles from '../Setting/TableList.less';
 import Cookies from '../../vendor/js.cookie.js';
 import moment from 'moment'; //时间格式化插件
+import {export_json_to_excel} from '../../vendor/Export2Excel';
 const FormItem = Form.Item;
 const { Option } = Select;
 const { TextArea } = Input;
@@ -114,7 +114,7 @@ export default class PrintLodop extends PureComponent{
           <Col md={8} sm={24}>
             <FormItem label="门票类型">
               {getFieldDecorator('tkTypeId')(
-                <Select placeholder="请选择票务类型" style={{ width: '100%' }} onChange={this.handleTicketType}>
+                <Select placeholder="请选择票务类型" style={{ width: '100%' }} >
                   {category &&  category.map((item,index)=>{
                     return <Option value={item.id} key={index}>{item.name}</Option>
                   })}
@@ -156,7 +156,7 @@ export default class PrintLodop extends PureComponent{
           <Col md={12} sm={24}>
             <FormItem label="门票类型">
               {getFieldDecorator('tkTypeId')(
-                <Select placeholder="请选择票务类型" style={{ width: '100%' }} onChange={this.handleTicketType}>
+                <Select placeholder="请选择票务类型" style={{ width: '100%' }}>
                   {category &&  category.map((item,index)=>{
                     return <Option value={item.id} key={index}>{item.name}</Option>
                   })}
@@ -201,6 +201,12 @@ export default class PrintLodop extends PureComponent{
   // 添加区域1 modal
   handleModalVisibleOne = () => {
     const {dispatch} = this.props;
+    dispatch({
+      type: 'print/fetchCategory'
+    });
+    dispatch({
+      type: 'print/fetchAgency'
+    });
     this.setState({
       modalVisibleOne: !this.state.modalVisibleOne,
     });
@@ -577,6 +583,36 @@ export default class PrintLodop extends PureComponent{
       resetFields();
     }
   }
+   // 过滤导出表格
+   formatJson = (filterVal, jsonData)=>{
+    return jsonData.map(v => filterVal.map(j => {
+      if (j === 'timestamp') {
+        return parseTime(v[j])
+      } else {
+        return v[j]
+      }
+    }))
+  }
+  // 下载表格
+  handleDownExcel = () => {
+    let date = moment.unix(new Date().getTime() / 1000).format('YYYY-MM-DD');
+    const {print:{ data}} = this.props;
+    if(data){
+      // import('../../vendor/Export2Excel')
+      // .then(excel=>{
+        const tHeader = ['客户名', '门票类型','门票数量','成人数量','学生数量','合计金额','付款方式','有效时间','出票人'];
+        const filterVal = ['agencyName', 'ticketType','quantity','atQuantity','stQuantity','totalPrice','payType','validateTime','sellerName'];
+        let list = this.formatJson(filterVal, data.list);
+        list.push(['总票数: '+data.allTicketNum,'  ','  ','  ','  ','  ','  ','  ','总价格: '+data.allAmount]);
+        export_json_to_excel(tHeader, list, '团票表格数据'+date);
+      // }).then(()=>{
+      //   message.success('下载成功');
+      // });
+    }else{
+      message.error('没有数据');
+    }
+    
+  }
   render(){
     const {modalVisible,isDown,modalVisibleOne,disabled,initData,selDisabled,count} = this.state;
     const {print:{data,loading,agency,category},form:{getFieldDecorator}} = this.props
@@ -658,13 +694,16 @@ export default class PrintLodop extends PureComponent{
               {this.renderForm()}
               <Button type="primary" onClick={this.handleModalVisible}>添加旅行社信息</Button>
               <Button type="primary" onClick={this.handleModalVisibleOne} style={{marginLeft:'.5rem'}}>添加出票信息</Button>
+              <Button type="primary" onClick={this.handleDownExcel} style={{marginLeft:'.5rem'}}>下载团票信息表格</Button>
             </div>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                <TableList
+                <Table
                   loading={loading}
-                  data={data}
+                  dataSource={data.list}
+                  bordered
                   columns={columns}
+                  footer={()=><div className={styles.tablesFooter}><span>总票数: {data.allTicketNum}</span><span>总价:{data.allAmount}</span></div>}
                 />
               </Col>
             </Row>
