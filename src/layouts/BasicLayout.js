@@ -72,6 +72,10 @@ class BasicLayout extends React.PureComponent {
       //   type: 'login/fetchPermission'
       // });
   }
+  componentDidMount(){
+    let loading = document.querySelector('.preloader');
+    loading.setAttribute('class','preloader-hidden');
+  }
   // componentDidCatch(err,info){
   //   console.log(err,info);
   // }

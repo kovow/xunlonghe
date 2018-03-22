@@ -38,6 +38,10 @@ class UserLayout extends React.PureComponent {
     });
     return title;
   }
+  componentDidMount(){
+    let loading = document.querySelector('.preloader');
+    loading.setAttribute('class','preloader-hidden');
+  }
   render() {
     const { getRouteData } = this.props;
 
