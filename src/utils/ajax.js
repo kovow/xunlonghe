@@ -2,7 +2,7 @@ import axios from 'axios';
 import {baseApi} from '../config/api';
 import {isArray} from 'lodash';
 import { notification } from 'antd';
-import Cookies from '../vendor/js.cookie.js';
+import * as Cookies from 'js-cookie';
 // api 地址
 export const http = axios.create({
     baseURL: baseApi,

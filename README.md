@@ -15,9 +15,8 @@
 - :globe_with_meridians: **基于rbac权限的后台管理系统**: 实现了后台rbac 权限管理系统
 ## 更新日志:2018-03-13
 1. 移除pro 多余组件;
-2. 移除mock 环境
-3. 优化沉淀语句.沉淀写法;
-4. 增加gif 动画演示
+2. 优化沉淀语句.沉淀写法;
+3. 增加gif 动画演示
 ## 示例图片
 [![示例图片1](./screen/01.gif) "示例图片1")](https://github.com/whevether/xunlonghe.git "示例")
 [![示例图片2](./screen/02.gif) "示例图片2")](https://github.com/whevether/xunlonghe.git "示例")

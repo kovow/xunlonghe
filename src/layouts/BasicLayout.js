@@ -14,7 +14,7 @@ import GlobalFooter from '../components/GlobalFooter';
 import NotFound from '../routes/Exception/404';
 import styles from './BasicLayout.less';
 import requireAuth from '../common/requireAuth';
-import Cookies from '../vendor/js.cookie.js';
+import * as Cookies from 'js-cookie';
 const { Header, Sider, Content } = Layout;
 const { SubMenu } = Menu;
 const query = {
@@ -74,7 +74,11 @@ class BasicLayout extends React.PureComponent {
   }
   componentDidMount(){
     let loading = document.querySelector('.preloader');
-    loading.setAttribute('class','preloader-hidden');
+    if(loading){
+      setTimeout(()=>{
+        loading.setAttribute('class','preloader-hidden');
+      },5000);
+    }
   }
   // componentDidCatch(err,info){
   //   console.log(err,info);

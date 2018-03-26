@@ -4,7 +4,7 @@ import {Row, Col, Card, Form, Input, Select, Button,  InputNumber, DatePicker,  
 // 面包屑头
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from '../Setting/TableList.less';
-import Cookies from '../../vendor/js.cookie.js';
+import * as Cookies from 'js-cookie';
 import moment from 'moment'; //时间格式化插件
 import {export_json_to_excel} from '../../vendor/Export2Excel';
 const FormItem = Form.Item;

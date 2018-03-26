@@ -1,7 +1,7 @@
 import { routerRedux } from 'dva/router';
 import { fakeAccountLogin, fakeMobileLogin, queryPermission,userLogout } from '../services/api';
 import { httpToken } from '../utils/ajax';
-import Cookies from '../vendor/js.cookie.js';
+import * as Cookies from 'js-cookie';
 import {isEmpty} from 'lodash';
 import {message} from 'antd';
 export default {

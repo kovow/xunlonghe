@@ -40,7 +40,11 @@ class UserLayout extends React.PureComponent {
   }
   componentDidMount(){
     let loading = document.querySelector('.preloader');
-    loading.setAttribute('class','preloader-hidden');
+    if(loading){
+      setTimeout(()=>{
+        loading.setAttribute('class','preloader-hidden');
+      },5000);
+    }
   }
   render() {
     const { getRouteData } = this.props;

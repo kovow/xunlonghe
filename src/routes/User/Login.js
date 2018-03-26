@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Form, Input, Tabs, Button, Icon, Checkbox, Row, Col, Alert } from 'antd';
-import Cookies from '../../vendor/js.cookie.js';
+import * as Cookies from 'js-cookie';
 import styles from './Login.less';
 
 const FormItem = Form.Item;

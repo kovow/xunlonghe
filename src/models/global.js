@@ -1,5 +1,5 @@
 import { queryPermission } from '../services/api';
-import Cookies from '../vendor/js.cookie.js';
+import * as Cookies from 'js-cookie';
 import { httpToken } from '../utils/ajax';
 import {isEmpty} from 'lodash';
 import {errorMessage} from '../utils/utils';

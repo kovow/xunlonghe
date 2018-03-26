@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'dva/router';
 import { notification, Spin } from 'antd';
 import { connect } from 'dva';
-import Cookies from '../vendor/js.cookie.js';
+import * as Cookies from 'js-cookie';
 import {Map} from 'immutable';
 // 根据后台权限数据匹配前台url;控制后台访问权限,
 export default ChildComponent => {
