@@ -168,7 +168,7 @@ export const getNavData = app => [
       {
         name: '资产管理系统',
         icon: 'red-envelope',
-        path: 'asset_sys',
+        path: 'cmp/asset_sys',
         children: [{
           name: '资产管理',
           path: 'asset',
@@ -177,7 +177,7 @@ export const getNavData = app => [
             name: '资产列表',
             icon: 'profile',
             path: 'assetList',
-            component: dy(app, ['rule'], ()=> import('../routes/AssetsManagement/assetsList/index')),
+            component: dy(app, ['assets'], ()=> import('../routes/AssetsManagement/assetsList/index')),
           },{
             name: '借还登记',
             icon: 'schedule',

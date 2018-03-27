@@ -89,7 +89,7 @@ export default ChildComponent => {
     }
   }
   return connect(state=>({
-    loginPermission: state.login.permission,
+    // loginPermission: state.login.permission,
     permission: state.global.permission
   }))(RequireAuth);
 };

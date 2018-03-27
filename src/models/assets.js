@@ -10,16 +10,25 @@ export default {
 
   effects: {
     *fetch({payload},{put,call}){
-      yield put({
-        type: 'changeLoading',
-        payload: true
-      });
-      const response = yield call(getAssetsList);
-      console.log(response);
-      yield put({
-        type: 'changeLoading',
-        payload: false
-      });
+      try{
+        yield put({
+          type: 'changeLoading',
+          payload: true
+        });
+        const response = yield call(getAssetsList);
+        if(response.status === 200){
+          yield put({
+            type: 'save',
+            payload: response.data.list
+          });
+        }
+        yield put({
+          type: 'changeLoading',
+          payload: false
+        });
+      }catch{
+        
+      }
     }
   },
 
@@ -30,5 +39,11 @@ export default {
         loading: action.payload,
       };
     },
+    save(state,action){
+      return{
+        ...state,
+        data:action.payload
+      }
+    }
   },
 };

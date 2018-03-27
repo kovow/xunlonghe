@@ -54,7 +54,7 @@ class Area extends Component{
       title: options.title,
       legend:options.legend,
       tooltip: options.tooltip,
-      xAxis: Object.assign(...options.xAxis,{data:data}),
+      xAxis: {...options.xAxis,data:data},
       // y轴
       yAxis: options.yAxis,
       series: options.series.map((item,i)=>{
